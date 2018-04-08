@@ -1,20 +1,148 @@
-<!--The content below is only a placeholder and can be replaced.-->
-<div style="text-align:center">
-  <h1>
-    Welcome to {{ title }}!
-  </h1>
-  <img width="300" alt="Angular Logo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTAgMjUwIj4KICAgIDxwYXRoIGZpbGw9IiNERDAwMzEiIGQ9Ik0xMjUgMzBMMzEuOSA2My4ybDE0LjIgMTIzLjFMMTI1IDIzMGw3OC45LTQzLjcgMTQuMi0xMjMuMXoiIC8+CiAgICA8cGF0aCBmaWxsPSIjQzMwMDJGIiBkPSJNMTI1IDMwdjIyLjItLjFWMjMwbDc4LjktNDMuNyAxNC4yLTEyMy4xTDEyNSAzMHoiIC8+CiAgICA8cGF0aCAgZmlsbD0iI0ZGRkZGRiIgZD0iTTEyNSA1Mi4xTDY2LjggMTgyLjZoMjEuN2wxMS43LTI5LjJoNDkuNGwxMS43IDI5LjJIMTgzTDEyNSA1Mi4xem0xNyA4My4zaC0zNGwxNy00MC45IDE3IDQwLjl6IiAvPgogIDwvc3ZnPg==">
-</div>
-<h2>Here are some links to help you start: </h2>
-<ul>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://angular.io/tutorial">Tour of Heroes</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://github.com/angular/angular-cli/wiki">CLI Documentation</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://blog.angular.io/">Angular blog</a></h2>
-  </li>
-</ul>
+<mat-toolbar  color="primary">
+  <span>Kodilla CRUD App & Angular-Material</span>
+</mat-toolbar>
+
+
+<mat-card class="card-add-new">
+
+  <mat-card-header>
+    <mat-card-title>
+      <span class="mat-headline"> Add a new task </span>
+    </mat-card-title>
+  </mat-card-header>
+
+  <mat-card-content>
+
+    <mat-form-field class="input-new-task-name">
+      <input matInput style="height:inherit" minlength="{{newTaskName ? 3 : 'undefined'}}" [(ngModel)]="newTaskName" placeholder="Task name">
+    </mat-form-field>
+    <mat-form-field class="textbox-new-task-content">
+      <textarea matInput [(ngModel)]="newTaskContent" placeholder="Task content"></textarea>
+    </mat-form-field>
+    <button mat-mini-fab matTooltip="Add a task" disabled="{{!newTaskName || newTaskName.length<3 || !newTaskContent}}" color="primary" (click)="addTask()"><mat-icon>add</mat-icon></button>
+
+  </mat-card-content>
+</mat-card>
+
+<mat-card class="card-tasks">
+
+  <mat-card-header>
+    <mat-card-title>
+      <span class="mat-headline"> Tasks from the API </span>
+    </mat-card-title>
+  </mat-card-header>
+
+  <mat-card-content>
+
+    <mat-grid-list cols="40" gutterSize="3px" rowHeight="64px">
+      <div class="task-headers">
+        <mat-grid-tile [colspan]="8">
+          <p class="mat-accent">Task name</p>
+        </mat-grid-tile>
+        <mat-grid-tile [colspan]="12">
+          <p class="mat-accent">Task content</p>
+        </mat-grid-tile>
+        <mat-grid-tile [colspan]="2">
+          <p class="mat-accent">Submit</p>
+        </mat-grid-tile>
+        <mat-grid-tile [colspan]="2">
+          <p class="mat-accent">Cancel</p>
+        </mat-grid-tile>
+        <mat-grid-tile [colspan]="2">
+          <p class="mat-accent">Delete</p>
+        </mat-grid-tile>
+        <mat-grid-tile [colspan]="6">
+          <p class="mat-accent">Trello board</p>
+        </mat-grid-tile>
+        <mat-grid-tile [colspan]="6">
+          <p class="mat-accent">Trello list</p>
+        </mat-grid-tile>
+        <mat-grid-tile [colspan]="2">
+          <p class="mat-accent">Add</p>
+        </mat-grid-tile>
+      </div>
+
+      <div class="task-row" *ngFor="let task of tasks">
+
+        <mat-grid-tile [colspan]="8">
+          <input  class="input-tasks-name {{task.isModified() ? 'highlight-change' : ''}}"
+                  required minlength="3"
+                  [(ngModel)]="task.name" placeholder="{{task.name ? '' : 'Task name'}}">
+        </mat-grid-tile>
+
+        <mat-grid-tile [colspan]="12">
+            <textarea  class="input-tasks-content  {{task.isModified() ? 'highlight-change' : ''}}"
+                       required
+                       [(ngModel)]="task.content" placeholder="{{task.content ? '' : 'Task content'}}">
+
+            </textarea>
+        </mat-grid-tile>
+
+        <mat-grid-tile [colspan]="2">
+          <button mat-mini-fab
+                  matTooltip="Save changes"
+                  disabled="{{!task.isModified() || !task.name || task.name.length<3 || !task.content}}"
+                  color="primary"
+                  class="button-task-action"
+                  (click)="submitChange(task)">
+            <mat-icon>done</mat-icon>
+          </button>
+        </mat-grid-tile>
+
+        <mat-grid-tile [colspan]="2">
+          <button mat-mini-fab
+                  matTooltip="Cancel changes"
+                  disabled="{{!task.isModified()}}"
+                  color="primary"
+                  class="button-task-action"
+                  (click)="discardChange(task)">
+            <mat-icon>clear</mat-icon>
+          </button>
+        </mat-grid-tile>
+
+        <mat-grid-tile [colspan]="2">
+          <button mat-mini-fab
+                  matTooltip="Delete task"
+                  color="primary"
+                  class="button-task-delete"
+                  (click)="deleteTask(task)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </mat-grid-tile>
+
+        <mat-grid-tile [colspan]="6">
+          <mat-select class="select-board" placeholder="Select Trello board" [(ngModel)]="task.trelloBoard">
+            <mat-option> --None-- </mat-option>
+            <mat-option [value]="board" *ngFor="let board of trelloBoards"> {{board.name}}  </mat-option>
+          </mat-select>
+        </mat-grid-tile>
+
+        <mat-grid-tile [colspan]="6">
+          <mat-select class="select-list"
+                      placeholder="{{task.trelloBoard ? 'Select Trello list': ''}}"
+                      [(ngModel)]="task.trelloList">
+            <mat-option *ngIf="task.trelloBoard"> --None-- </mat-option>
+            <mat-option [value]=list *ngFor="let list of task.getLists()">
+              {{list.name}}
+            </mat-option>
+          </mat-select>
+        </mat-grid-tile>
+
+        <mat-grid-tile [colspan]="2">
+          <button mat-mini-fab
+                  matTooltip="Create Trello card"
+                  disabled="{{!task.trelloList || !task.name}}"
+                  color="primary"
+                  class="button-task-action trello"
+                  (click)="addTrelloCard(task)">
+            <mat-icon *ngIf="task.trelloList && task.name" svgIcon="trello-icon"></mat-icon>
+          </button>
+        </mat-grid-tile>
+
+      </div>
+    </mat-grid-list>
+
+  </mat-card-content>
+</mat-card>
+
 

@@ -1,0 +1,66 @@
+.input-new-task-name {
+  padding-bottom: 20px;
+  height: 24px;
+  margin-right: 10px;
+}
+.textbox-new-task-content {
+  margin-right: 10px;
+}
+.task-row {
+  height: fit-content;
+}
+.select-board {
+  flex: 1;
+  margin-left: 5px;
+  margin-right: 5px;
+}
+.select-list {
+  flex: 1;
+  margin-left: 5px;
+  margin-right: 5px;
+}
+.trello {
+  background-color: #0079BF; /*color of Trello icon*/
+}
+div.task-headers > mat-grid-tile {
+  font-weight: bold;
+  background: lightblue;
+}
+.input-tasks-name {
+  min-width: 0px;
+  flex: 1;
+  height: 24px;
+  margin-left: 5px;
+  margin-right: 5px;
+  background: inherit;
+  font-family: Roboto;
+  font-size: medium;
+  padding-bottom: 19px;
+  border-style: none;
+  text-align: left;
+  text-overflow: ellipsis;
+}
+.input-tasks-content {
+  flex: 1;
+  height: 40px;
+  margin-left: 5px;
+  margin-right: 5px;
+  font-family: Roboto;
+  font-size: medium;
+  background: inherit;
+  border-style: none;
+}
+div.task-row > mat-grid-tile {
+  background: azure;
+}
+.highlight-change {
+  color: red;
+  font-style: italic;
+}
+.card-tasks {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+.card-add-new {
+  margin-top: 10px;
+}
